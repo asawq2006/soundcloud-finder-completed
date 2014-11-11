@@ -1,6 +1,7 @@
 (function(window, document, undefined) {
   // SoundCloud API key
   var SC_CLIENT_ID = "1c3aeb3f91390630d351f3c708148086";
+  var STATUS_OK = 200;
 
   /* Initialize SoundCloud JavaScript API
    *
@@ -44,12 +45,12 @@
 
     var searchRequest = new XMLHttpRequest();
     searchRequest.addEventListener("load", function() {
+      if (searchRequest.status !== STATUS_OK) {
+        $("#player").html("No tracks found.");
+        return;
+      }
       var response = JSON.parse(searchRequest.responseText);
       displayPlayer(response);
-    });
-
-    searchRequest.addEventListener("error", function() {
-      $("#player").html('Error in accessing the server.');
     });
 
     var searchParams = "artist=" + encodeURIComponent(artist) + "&title=" + encodeURIComponent(title);
